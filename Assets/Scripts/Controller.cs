@@ -1,15 +1,15 @@
+using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Controller : MonoBehaviour
 {
-    [SerializeField] private GameObject eachPlayerInstance;
+    //[SerializeField] private GameObject eachPlayerInstance;
     //[SerializeField] private Transform ground;
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
-
     }
 
     public IEnumerator Loading()
@@ -28,7 +28,6 @@ public class Controller : MonoBehaviour
 
     private void InstantiateWorld()
     {
-        GameObject temp = Instantiate(eachPlayerInstance);
-        temp.transform.position = new Vector3(Random.Range(0,5), 1.1f, Random.Range(0, 5));
+        GameObject temp = PhotonNetwork.Instantiate("Each Player Instance", new Vector3(Random.Range(0, 5), 1.1f, Random.Range(0, 5)), Quaternion.identity);
     }
 }

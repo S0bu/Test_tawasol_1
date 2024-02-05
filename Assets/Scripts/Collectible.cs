@@ -1,3 +1,5 @@
+using Photon.Pun;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,46 +16,62 @@ public class Collectible : MonoBehaviour
     [SerializeField] private Transform parent;
 
     GameObject temp;
+    PhotonView view;
     
     void Start()
     {
         Items.collectedItems.Clear();
         Items.droppedItems.Clear();
+
+        view = GetComponent<PhotonView>();
     }
 
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space)) 
+        try
         {
-            if (Items.collectedItems.Count == 0)
+            if (view.IsMine)
             {
-                temp = Instantiate(collectiblePrefab, transform);
-                temp.transform.SetParent(parent);
-            }
-            else
-            {
-                temp = Items.collectedItems[0];
-                Items.collectedItems.RemoveAt(0);
-            }
-            temp.SetActive(true);
-            temp.GetComponent<Rigidbody>().AddForce(transform.forward * 1.2f, ForceMode.Impulse);
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    if (Items.collectedItems.Count == 0)
+                    {
+                        temp = PhotonNetwork.Instantiate("Collectible", transform.position, Quaternion.identity);
+                        temp.transform.SetParent(parent);
+                    }
+                    else
+                    {
+                        temp = Items.collectedItems[0];
+                        Items.collectedItems.RemoveAt(0);
+                    }
+                    temp.SetActive(true);
+                    temp.GetComponent<Rigidbody>().AddForce(transform.forward * 1.2f, ForceMode.Impulse);
 
-            Items.droppedItems.Add(temp);
-            temp = null;
+                    Items.droppedItems.Add(temp);
+                    temp = null;
+                }
+            }
         }
+        catch(Exception e)
+        {
+            Debug.LogError(e.ToString());
+        }
+        
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        print($"Collision {gameObject}  {collision.gameObject}");
-        if (collision.gameObject.CompareTag("Collectible"))
+    #region if_able_to_collect
+    /*    private void OnCollisionEnter(Collision collision)
         {
-            temp = collision.gameObject;
-            temp.SetActive(false);
+            print($"Collision {gameObject}  {collision.gameObject}");
+            if (collision.gameObject.CompareTag("Collectible"))
+            {
+                temp = collision.gameObject;
+                temp.SetActive(false);
 
-            Items.collectedItems.Add(temp);
-            Items.droppedItems.Remove(temp);
-        }
-    }
+                Items.collectedItems.Add(temp);
+                Items.droppedItems.Remove(temp);
+            }
+        }*/
+    #endregion
 }

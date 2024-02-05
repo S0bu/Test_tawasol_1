@@ -1,6 +1,8 @@
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
@@ -8,6 +10,10 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField]
     private byte maxPlayersPerRoom = 2;
     int roomNumber = 1;
+
+    [SerializeField] TextMeshProUGUI error;
+    [SerializeField] TextMeshProUGUI loadingText;
+    [SerializeField] GameObject lobby;
 
     public Controller controller;
 
@@ -20,13 +26,48 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         print("Connected to Master");
-        PhotonNetwork.JoinRoom($"New_Room_{roomNumber}");
+        //PhotonNetwork.JoinRoom($"New_Room_{roomNumber}");
+
+        loadingText.gameObject.SetActive(false);
+        lobby.SetActive(true);
+    }
+
+    public void Create_Room(TextMeshProUGUI roomName)
+    {
+        if(roomName.text == null)
+        {
+            error.text = "Enter a room name";
+            return;
+        }
+        else
+        {
+            PhotonNetwork.CreateRoom(roomName.text, new RoomOptions { MaxPlayers = maxPlayersPerRoom });
+        }
+        
+    }
+    
+    public void Join_Room(TextMeshProUGUI roomName)
+    {
+        if(roomName.text == null)
+        {
+            error.text = "Enter a room name";
+            return;
+        }
+        else
+        {
+            PhotonNetwork.JoinRoom(roomName.text);
+        }
+        
+    }
+
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        error.text = message;
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        print("Creating new room for 2 players");
-        PhotonNetwork.CreateRoom($"New_Room_{roomNumber++}", new RoomOptions { MaxPlayers = maxPlayersPerRoom });
+        error.text = message;
     }
 
     public override void OnJoinedRoom()

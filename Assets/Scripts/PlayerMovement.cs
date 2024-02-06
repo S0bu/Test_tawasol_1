@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpForce = 4f;
     [SerializeField] private float gravity = 9.8f;
 
-    [SerializeField] GameObject minimap;
+    [SerializeField] private GameObject minimap;
 
     private float horizontalInput;
     private float verticalInput;

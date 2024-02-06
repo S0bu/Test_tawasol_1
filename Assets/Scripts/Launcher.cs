@@ -1,5 +1,6 @@
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] TextMeshProUGUI error;
     [SerializeField] TextMeshProUGUI loadingText;
     [SerializeField] GameObject lobby;
+
+    [SerializeField] GameObject waitingTime;
 
     public Controller controller;
 
@@ -73,6 +76,18 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         print("Joined Room");
+
+        lobby.SetActive(false);
+        waitingTime.SetActive(true);
+        StartCoroutine(Waiting());
+    }
+
+    private IEnumerator Waiting()
+    {
+        while(PhotonNetwork.CurrentRoom.PlayerCount < 2)
+            yield return null;
+
+        waitingTime.SetActive(false);
         StartCoroutine(controller.Loading());
     }
 }

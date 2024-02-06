@@ -28,7 +28,8 @@ public class Controller : MonoBehaviour
     }
 
     private void InstantiateWorld()
-    {
-        GameObject temp = PhotonNetwork.Instantiate("Each Player Instance", new Vector3(Random.Range(0, 5), 1.1f, Random.Range(0, 5)), Quaternion.identity);
+    { 
+        GameObject clone = PhotonNetwork.Instantiate("Each Player Instance", new Vector3(Random.Range(0f, 10f), 1.1f, Random.Range(0f, 10f)), Quaternion.identity);
+        clone.name = "Player";
     }
 }

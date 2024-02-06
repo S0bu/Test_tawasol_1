@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpForce = 4f;
     [SerializeField] private float gravity = 9.8f;
 
+    [SerializeField] GameObject minimap;
+
     private float horizontalInput;
     private float verticalInput;
     private Vector3 playerVelocity;
@@ -25,19 +27,9 @@ public class PlayerMovement : MonoBehaviour
         playerController = GetComponent<CharacterController>();
         view = GetComponent<PhotonView>();
 
-        //cam = transform.Find("Main Camera").GetComponent<Transform>();
-    }
-    private void Start()
-    {
-        Transform temp = transform.GetParentComponent<Transform>();
-        print(temp);
-        if(!view.IsMine)
-        {
-            for(int i = 0; i < 3; i++)
-            {
-                Destroy(temp.GetChild(1).gameObject);
-            }
-        }
+        cam = GameObject.Find("/Main Camera").GetComponent<Transform>();
+        if(view.IsMine)
+            minimap.SetActive(true);
     }
 
     void Update()

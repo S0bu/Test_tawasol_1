@@ -25,7 +25,7 @@ public class Collectible : MonoBehaviour
 
         view = GetComponent<PhotonView>();
 
-        //parent = transform.Find("Balls").GetComponent<Transform>();
+        parent = GameObject.Find("Balls").GetComponent<Transform>();
     }
 
 

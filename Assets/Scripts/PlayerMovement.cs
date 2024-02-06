@@ -19,10 +19,25 @@ public class PlayerMovement : MonoBehaviour
 
     PhotonView view;
 
-    private void Start()
+
+    private void OnEnable()
     {
         playerController = GetComponent<CharacterController>();
         view = GetComponent<PhotonView>();
+
+        //cam = transform.Find("Main Camera").GetComponent<Transform>();
+    }
+    private void Start()
+    {
+        Transform temp = transform.GetParentComponent<Transform>();
+        print(temp);
+        if(!view.IsMine)
+        {
+            for(int i = 0; i < 3; i++)
+            {
+                Destroy(temp.GetChild(1).gameObject);
+            }
+        }
     }
 
     void Update()

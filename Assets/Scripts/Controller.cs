@@ -21,6 +21,7 @@ public class Controller : MonoBehaviour
         var scene = SceneManager.GetSceneByBuildIndex(1);
         if (scene.isLoaded)
         {
+            new WaitForSeconds(2);
             SceneManager.UnloadSceneAsync(sceneBuildIndex: 0);
             InstantiateWorld();
         }

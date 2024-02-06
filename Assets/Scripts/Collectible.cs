@@ -18,12 +18,14 @@ public class Collectible : MonoBehaviour
     GameObject temp;
     PhotonView view;
     
-    void Start()
+    void OnEnable()
     {
         Items.collectedItems.Clear();
         Items.droppedItems.Clear();
 
         view = GetComponent<PhotonView>();
+
+        //parent = transform.Find("Balls").GetComponent<Transform>();
     }
 
 
@@ -37,7 +39,7 @@ public class Collectible : MonoBehaviour
                 {
                     if (Items.collectedItems.Count == 0)
                     {
-                        temp = PhotonNetwork.Instantiate("Collectible", transform.position, Quaternion.identity);
+                        temp = PhotonNetwork.Instantiate("Collectible", transform.position + new Vector3(0, 1.2f, 0), Quaternion.identity);
                         temp.transform.SetParent(parent);
                     }
                     else
